@@ -2,19 +2,23 @@ Quiz API
 =============================
 ## Overview
 
-In this assignment students are tasked with creating a small RESTful API that simulates a backend for a quiz-like application. Students should begin by constructing a reasonable database model using the summary below. After they've completed their model and generated their database with JPA, they should then implement the endpoints listed at the end of this README file.
+In this assignment students are tasked with creating a small RESTful API that simulates basic backend functionality for a quiz application. Students are given a skeleton that has the `GET quiz` endpoint completely implemented as well as the infrastructure required for it to function. This will allow students to focus solely on completing the other 6 endpoints listed in the [Endpoint Documentation](#endpoint-documentation) below. Student's should start by looking through the provided skeleton and running the app to see what it does.
 
 ### Summary of the API
 
-This quiz application should contain three entities: `Quiz`, `Question`, and `Answer`. Each should have a generated numerical primary key. A `Quiz` should have a name and maintain a collection of `Question` entities that are part of that quiz. A `Question` should have a text field and a collection of possible `Answer` objects. An `Answer` should also have a text field and a field which determines if the `Answer` is the correct one for the `Question` it belongs to.
+This Quiz API contains 3 entities: `Quiz`, `Question`, and `Answer`. Each have an auto-generated numerical primary key. The `Quiz` entity has a name and maintains a collection of `Question` entities that are part of the the `Quiz` using an `@OneToMany` annotation, provided by JPA, to denote the relationship between the two tables in the database. The `Question` entity has a text field, the `Quiz` that it belongs to annotated with `@ManyToOne` representing the opposite side of the relationship stored in the `Quiz` class, and a collection of `Answer` objects annotated with `@OneToMany`. Finally, the `Answer` entity also has a text field, a boolean to denote if the given `Answer` is the correct one for the `Question` it belongs to, and the `Question` object that it belongs to annotated with `@ManyToOne`.
+
+An entity relationship diagram is provided below that represents the database used by the Quiz API:
+![quiz-api](https://user-images.githubusercontent.com/12191780/121982142-95da7100-cd54-11eb-97cd-e0220b59025b.png)
+
+
+A data transfer object representing the basic response for each entity type is provided in the skeleton. Notice that the DTOs are slightly different than the entities. This is intentional and is done in order to avoid infinite recursion when serializing to JSON. The student will need to add more DTOs and when they do will also need to add more functionality to their mapper interfaces. (HINT: you will at the minimum need to add a QuizRequestDto)
 
 ---
 
-This assignment is intentionally lacking in it's description of required services, queries, and entities/models. It is up to the student to decide how to model the requests, responses, and organize the business logic, and how to best utilize JPA/Hibernate to persist data in order to meet the specified requirements.
+### Endpoint Documentation
 
-### Requirements
-
-In this assignment students should use the short summary above to construct a data model and implement a database using JPA/Hibernate. After they've constructed their data model they should implement the following endpoints:
+The focus of this assignment is on creating endpoints and implementing their functionality in the provided Controller, Service, and Repositories. Note that there is a repository for each table in the database, but there is only 1 controller and 1 service which should handle all the endpoints below. The `Get /quiz` endpoint is implemented for you as an example for you to follow while implemented the other 6.
 
 - [ ] `GET quiz`
     - Returns the collection of `Quiz` elements
