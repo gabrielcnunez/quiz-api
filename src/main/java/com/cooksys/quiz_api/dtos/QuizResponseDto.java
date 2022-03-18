@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class QuizResponseDto {
 
-  public Long id;
+  private Long id;
 
-  public String name;
+  private String name;
 
   public List<QuestionResponseDto> questions;
 
