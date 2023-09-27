@@ -1,68 +1,12 @@
 {
 	"info": {
-		"_postman_id": "3ad26f7d-a8c3-40e1-9572-3052431e5b3b",
-		"name": "Quiz Api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "978772"
+		"_postman_id": "ed94980b-dd2c-4d75-8425-838922b4e050",
+		"name": "Quiz API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "GET /quiz",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"var schema = {\r",
-							"    \"type\": \"array\",\r",
-							"    \"items\": [{\r",
-							"        type: \"object\",\r",
-							"        properties:{\r",
-							"         \"id\": {\r",
-							"            \"type\":\"integer\"\r",
-							"             },\r",
-							"         \"name\": {\r",
-							"             \"type\":\"string\"\r",
-							"             },\r",
-							"         \"questions\": {\r",
-							"             \"type\":\"array\",\r",
-							"             \"items\": [{\r",
-							"                 type: \"object\",\r",
-							"                 properties: {\r",
-							"                    \"id\": { \"type\": \"integer\" },\r",
-							"                    \"text\": { \"type\": \"string\" },\r",
-							"                    \"answers\": { \r",
-							"                        \"type\": \"array\",\r",
-							"                        \"items\": [{\r",
-							"                            type: \"object\",\r",
-							"                            properties: {\r",
-							"                                \"id\": { \"type\": \"integer\" },\r",
-							"                                \"text\": { \"type\": \"string\" }\r",
-							"                            },\r",
-							"                            required: [\"id\", \"text\"]\r",
-							"                        }]\r",
-							"                    },\r",
-							"                 },\r",
-							"                 required: [\"id\", \"text\"]\r",
-							"             }]\r",
-							"            }\r",
-							"        },\r",
-							"        required: [\"id\", \"name\"]\r",
-							"    }]\r",
-							"}\r",
-							"\r",
-							"pm.test(\"Validate schema\", () => {\r",
-							"    pm.response.to.have.jsonSchema(schema);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -86,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Quiz 3\",\r\n    \"questions\": [\r\n        {\r\n            \"text\": \"Does this work?\",\r\n            \"answers\": [\r\n                {\r\n                    \"text\": \"Yes!\",\r\n                    \"correct\": \"true\"\r\n                },\r\n                {\r\n                    \"text\": \"No.\",\r\n                    \"correct\": \"false\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"name\": \"Downtown Quiz\",\r\n    \"questions\": [\r\n        {\r\n            \"text\": \"Who is Alex's sister?\",\r\n            \"answers\": [\r\n                {\r\n                    \"text\": \"Mecca\",\r\n                    \"correct\": \"false\"\r\n                },\r\n                {\r\n                    \"text\": \"Chaka\",\r\n                    \"correct\": \"true\"\r\n                },\r\n                {\r\n                    \"text\": \"Jen\",\r\n                    \"correct\": \"false\"\r\n                },\r\n                {\r\n                    \"text\": \"Serena\",\r\n                    \"correct\": \"false\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"text\": \"What's the title of the first episode?\",\r\n            \"answers\": [\r\n                {\r\n                    \"text\": \"Train Pain\",\r\n                    \"correct\": \"false\"\r\n                },\r\n                {\r\n                    \"text\": \"Hot Spot\",\r\n                    \"correct\": \"false\"\r\n                },\r\n                {\r\n                    \"text\": \"Sin Bin\",\r\n                    \"correct\": \"true\"\r\n                },\r\n                {\r\n                    \"text\": \"The Con\",\r\n                    \"correct\": \"false\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,21 +51,52 @@
 			"response": []
 		},
 		{
-			"name": "PATCH /quiz/{id}/rename/{newName}",
+			"name": "DELETE /quiz/{id}",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "PATCH",
+				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/quiz/43/rename/Quiz 4",
+					"raw": "http://localhost:8080/quiz/2",
+					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"quiz",
-						"43",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH /quiz/{id}/rename/{newName}",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/quiz/1/rename/Quiz Number One",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"quiz",
+						"1",
 						"rename",
-						"Quiz 4"
+						"Quiz Number One"
 					]
 				}
 			},
@@ -133,14 +108,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/quiz/1/random",
+					"raw": "localhost:8080/quiz/43/random",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"quiz",
-						"1",
+						"43",
 						"random"
 					]
 				}
@@ -154,7 +129,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"How's the weather?\",\r\n    \"answers\": [\r\n        {\r\n            \"text\": \"Sunny and Beautiful\",\r\n            \"correct\": \"true\"\r\n        },\r\n        {\r\n            \"text\": \"Rainy and perfect for a nap\",\r\n            \"correct\": \"false\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"text\": \"What's Matt's graffiti tag?\",\r\n    \"answers\": \r\n    [\r\n        {\r\n            \"text\": \"Minus\",\r\n            \"correct\": \"true\"\r\n        },\r\n        {\r\n            \"text\": \"Captain\",\r\n            \"correct\": \"false\"\r\n        },\r\n        {\r\n            \"text\": \"G.O.A.T.\",\r\n            \"correct\": \"false\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -182,56 +157,20 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/quiz/43/delete/47",
+					"raw": "localhost:8080/quiz/1/delete/3",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"quiz",
-						"43",
+						"1",
 						"delete",
-						"47"
+						"3"
 					]
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "DELETE /quiz/{id}",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "localhost:8080/quiz/43",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"quiz",
-						"43"
-					]
-				}
-			},
-			"response": []
-		}
-	],
-	"variable": [
-		{
-			"key": "question_id",
-			"value": ""
 		}
 	]
 }
