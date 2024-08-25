@@ -54,14 +54,7 @@ public class QuizServiceImpl implements QuizService {
 		if (quizRequestDto.getName() == null || quizRequestDto.getQuestions().isEmpty()) {
 			throw new BadRequestException("All fields are required for creating a quiz");
 		}
-		Quiz quizToPost = quizMapper.requestDtoToEntity(quizRequestDto);
-
-		for (Question question : quizToPost.getQuestions()) {
-			question.setQuiz(quizToPost);
-			for (Answer answer : question.getAnswers()) {
-				answer.setQuestion(question);
-			}
-		}
+		Quiz quizToPost = buildQuiz(quizMapper.requestDtoToEntity(quizRequestDto));
 
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToPost));
 	}
@@ -76,15 +69,7 @@ public class QuizServiceImpl implements QuizService {
 	
 	@Override
 	public QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto) {
-		Quiz quizToUpdate = getQuiz(id);
-		
-		for (Question question : quizToUpdate.getQuestions()) {
-			question.setQuiz(quizToUpdate);
-			question.setText(question.getText());
-			for (Answer answer : question.getAnswers()) {
-				answer.setQuestion(question);
-			}
-		}
+		Quiz quizToUpdate = buildQuiz(getQuiz(id));
 		
 		quizToUpdate.getQuestions().add(questionMapper.dtoToEntity(questionRequestDto));
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToUpdate));
@@ -105,6 +90,17 @@ public class QuizServiceImpl implements QuizService {
 		}
 
 		return optionalQuiz.get();
+	}
+	
+	private Quiz buildQuiz(Quiz quiz) {
+		for (Question question : quiz.getQuestions()) {
+			question.setQuiz(quiz);
+			for (Answer answer : question.getAnswers()) {
+				answer.setQuestion(question);
+			}
+		}
+		
+		return quiz;
 	}
 
 }
