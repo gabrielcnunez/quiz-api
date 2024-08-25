@@ -32,12 +32,7 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public QuizResponseDto getQuizById(Long id) {
-		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
-		if (optionalQuiz.isEmpty()) {
-			throw new NotFoundException("No quiz found with id: " + id);
-		}
-		
-		return quizMapper.entityToDto(optionalQuiz.get());
+		return quizMapper.entityToDto(getQuiz(id));
 	}
 	
 	@Override
@@ -60,6 +55,15 @@ public class QuizServiceImpl implements QuizService {
 	@Override
 	public QuizResponseDto deleteQuiz(Long id) {
 		return null;
+	}
+	
+	private Quiz getQuiz(Long id) {
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+		if (optionalQuiz.isEmpty()) {
+			throw new NotFoundException("No quiz found with id: " + id);
+		}
+		
+		return optionalQuiz.get();
 	}
 
 }
