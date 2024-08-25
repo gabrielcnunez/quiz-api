@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.quiz_api.dtos.QuestionResponseDto;
 import com.cooksys.quiz_api.dtos.QuizRequestDto;
 import com.cooksys.quiz_api.dtos.QuizResponseDto;
 import com.cooksys.quiz_api.services.QuizService;
@@ -36,7 +37,10 @@ public class QuizController {
 	  return quizService.getQuizById(id);
   }
   
-  // TODO: Implement the remaining 6 endpoints from the documentation.
+  @GetMapping("/{id}/random")
+  public QuestionResponseDto getRandomQuestion(@PathVariable Long id) {
+	  return quizService.getRandomQuestion(id);
+  }
   
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
