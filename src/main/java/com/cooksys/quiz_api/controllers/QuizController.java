@@ -59,6 +59,12 @@ public class QuizController {
 	  return quizService.addQuestion(id, questionRequestDto);
   }
   
+  
+  @DeleteMapping("/{id}/delete/{questionId}")
+  public QuestionResponseDto deleteQuestion(@PathVariable Long id, @PathVariable Long questionId) {
+	  return quizService.deleteQuestion(id, questionId);
+  }
+  
   @DeleteMapping("/{id}")
   public QuizResponseDto deleteQuiz(@PathVariable Long id) {
 	  return quizService.deleteQuiz(id);

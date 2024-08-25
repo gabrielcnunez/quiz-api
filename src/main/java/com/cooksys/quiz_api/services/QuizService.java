@@ -13,14 +13,16 @@ public interface QuizService {
 
 	QuizResponseDto getQuizById(Long id);
 	
-	QuizResponseDto createQuiz(QuizRequestDto quizRequestDto);
+	QuestionResponseDto getRandomQuestion(Long id);
 
-	QuizResponseDto deleteQuiz(Long id);
+	QuizResponseDto createQuiz(QuizRequestDto quizRequestDto);
 
 	QuizResponseDto renameQuiz(Long id, String name);
 
-	QuestionResponseDto getRandomQuestion(Long id);
-
 	QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto);
+
+	QuestionResponseDto deleteQuestion(Long id, Long questionId);
+
+	QuizResponseDto deleteQuiz(Long id);
 
 }

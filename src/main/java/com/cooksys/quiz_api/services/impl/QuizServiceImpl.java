@@ -17,6 +17,7 @@ import com.cooksys.quiz_api.exceptions.BadRequestException;
 import com.cooksys.quiz_api.exceptions.NotFoundException;
 import com.cooksys.quiz_api.mappers.QuestionMapper;
 import com.cooksys.quiz_api.mappers.QuizMapper;
+import com.cooksys.quiz_api.repositories.QuestionRepository;
 import com.cooksys.quiz_api.repositories.QuizRepository;
 import com.cooksys.quiz_api.services.QuizService;
 
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class QuizServiceImpl implements QuizService {
 
 	private final QuestionMapper questionMapper;
+	private final QuestionRepository questionRepository;
 	private final QuizRepository quizRepository;
 	private final QuizMapper quizMapper;
 
@@ -39,13 +41,13 @@ public class QuizServiceImpl implements QuizService {
 	public QuizResponseDto getQuizById(Long id) {
 		return quizMapper.entityToDto(getQuiz(id));
 	}
-	
+
 	@Override
 	public QuestionResponseDto getRandomQuestion(Long id) {
 		List<Question> quizQuestions = getQuiz(id).getQuestions();
 		Random rng = new Random();
 		Question randomQuestion = quizQuestions.get(rng.nextInt(0, quizQuestions.size()));
-		
+
 		return questionMapper.entityToDto(randomQuestion);
 	}
 
@@ -66,23 +68,40 @@ public class QuizServiceImpl implements QuizService {
 
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToRename));
 	}
-	
+
 	@Override
 	public QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto) {
 		Quiz quizToUpdate = buildQuiz(getQuiz(id));
-		
+
 		quizToUpdate.getQuestions().add(questionMapper.dtoToEntity(questionRequestDto));
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToUpdate));
 	}
-	
+
+	@Override
+	public QuestionResponseDto deleteQuestion(Long id, Long questionId) {
+		Question questionToDelete = getQuestion(questionId);
+		questionRepository.delete(questionToDelete);
+
+		return questionMapper.entityToDto(questionToDelete);
+	}
+
 	@Override
 	public QuizResponseDto deleteQuiz(Long id) {
 		Quiz quizToDelete = getQuiz(id);
 		quizRepository.delete(quizToDelete);
-		
+
 		return quizMapper.entityToDto(quizToDelete);
 	}
-	
+
+	private Question getQuestion(Long id) {
+		Optional<Question> optionalQuestion = questionRepository.findById(id);
+		if (optionalQuestion.isEmpty()) {
+			throw new NotFoundException("No question found with id: " + id);
+		}
+		
+		return optionalQuestion.get();
+	}
+
 	private Quiz getQuiz(Long id) {
 		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
 		if (optionalQuiz.isEmpty()) {
@@ -91,7 +110,7 @@ public class QuizServiceImpl implements QuizService {
 
 		return optionalQuiz.get();
 	}
-	
+
 	private Quiz buildQuiz(Quiz quiz) {
 		for (Question question : quiz.getQuestions()) {
 			question.setQuiz(quiz);
@@ -99,7 +118,7 @@ public class QuizServiceImpl implements QuizService {
 				answer.setQuestion(question);
 			}
 		}
-		
+
 		return quiz;
 	}
 
