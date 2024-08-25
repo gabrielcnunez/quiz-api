@@ -1,12 +1,15 @@
 package com.cooksys.quiz_api.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.cooksys.quiz_api.dtos.QuizRequestDto;
 import com.cooksys.quiz_api.dtos.QuizResponseDto;
 import com.cooksys.quiz_api.entities.Answer;
 import com.cooksys.quiz_api.entities.Question;
 import com.cooksys.quiz_api.entities.Quiz;
+import com.cooksys.quiz_api.exceptions.BadRequestException;
+import com.cooksys.quiz_api.exceptions.NotFoundException;
 import com.cooksys.quiz_api.mappers.QuizMapper;
 import com.cooksys.quiz_api.repositories.QuizRepository;
 import com.cooksys.quiz_api.services.QuizService;
@@ -29,11 +32,19 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public QuizResponseDto getQuizById(Long id) {
-		return quizMapper.entityToDto(quizRepository.getReferenceById(id));
+		Optional<Quiz> optionalQuiz = quizRepository.findById(id);
+		if (optionalQuiz.isEmpty()) {
+			throw new NotFoundException("No quiz found with id: " + id);
+		}
+		
+		return quizMapper.entityToDto(optionalQuiz.get());
 	}
 	
 	@Override
 	public QuizResponseDto createQuiz(QuizRequestDto quizRequestDto) {
+		if (quizRequestDto.getName() == null || quizRequestDto.getQuestions().isEmpty()) {
+			throw new BadRequestException("All fields are required for creating a quiz");
+		}
 		Quiz quizToPost = quizMapper.requestDtoToEntity(quizRequestDto);
 
 		for (Question question : quizToPost.getQuestions()) {
@@ -44,6 +55,11 @@ public class QuizServiceImpl implements QuizService {
 		}
 
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToPost));
+	}
+
+	@Override
+	public QuizResponseDto deleteQuiz(Long id) {
+		return null;
 	}
 
 }
