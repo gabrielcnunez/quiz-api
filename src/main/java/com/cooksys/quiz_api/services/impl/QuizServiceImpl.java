@@ -28,6 +28,11 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
+	public QuizResponseDto getQuizById(Long id) {
+		return quizMapper.entityToDto(quizRepository.getReferenceById(id));
+	}
+	
+	@Override
 	public QuizResponseDto createQuiz(QuizRequestDto quizRequestDto) {
 		Quiz quizToPost = quizMapper.requestDtoToEntity(quizRequestDto);
 
