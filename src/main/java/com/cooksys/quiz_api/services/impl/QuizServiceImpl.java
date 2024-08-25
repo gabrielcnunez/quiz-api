@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.quiz_api.dtos.QuestionRequestDto;
 import com.cooksys.quiz_api.dtos.QuestionResponseDto;
 import com.cooksys.quiz_api.dtos.QuizRequestDto;
 import com.cooksys.quiz_api.dtos.QuizResponseDto;
@@ -71,6 +72,22 @@ public class QuizServiceImpl implements QuizService {
 		quizToRename.setName(name);
 
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToRename));
+	}
+	
+	@Override
+	public QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto) {
+		Quiz quizToUpdate = getQuiz(id);
+		
+		for (Question question : quizToUpdate.getQuestions()) {
+			question.setQuiz(quizToUpdate);
+			question.setText(question.getText());
+			for (Answer answer : question.getAnswers()) {
+				answer.setQuestion(question);
+			}
+		}
+		
+		quizToUpdate.getQuestions().add(questionMapper.dtoToEntity(questionRequestDto));
+		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToUpdate));
 	}
 	
 	@Override
