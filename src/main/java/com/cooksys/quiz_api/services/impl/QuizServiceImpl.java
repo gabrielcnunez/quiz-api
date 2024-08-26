@@ -72,8 +72,8 @@ public class QuizServiceImpl implements QuizService {
 	@Override
 	public QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto) {
 		Quiz quizToUpdate = buildQuiz(getQuiz(id));
-
 		quizToUpdate.getQuestions().add(questionMapper.dtoToEntity(questionRequestDto));
+		
 		return quizMapper.entityToDto(quizRepository.saveAndFlush(quizToUpdate));
 	}
 
@@ -98,7 +98,7 @@ public class QuizServiceImpl implements QuizService {
 		if (optionalQuestion.isEmpty()) {
 			throw new NotFoundException("No question found with id: " + id);
 		}
-		
+
 		return optionalQuestion.get();
 	}
 
