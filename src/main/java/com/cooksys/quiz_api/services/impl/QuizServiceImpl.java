@@ -71,7 +71,11 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public QuizResponseDto addQuestion(Long id, QuestionRequestDto questionRequestDto) {
+<<<<<<< HEAD
 		Quiz quizToUpdate = getQuiz(id);
+=======
+		Quiz quizToUpdate = buildQuiz(getQuiz(id));
+>>>>>>> 4da72b638e907f22f847555da004f74cb28a9494
 		Question questionToAdd = questionMapper.dtoToEntity(questionRequestDto);
 		questionToAdd.setQuiz(quizToUpdate);
 		for (Answer answer : questionToAdd.getAnswers()) {
